@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+<!--        <menuitem id="parent_overall_dashboard" web_icon="dynamic_screens,static/customer_screen.png"-->
+<!--                  name="Dashboard" sequence="1"/>-->
+
+
+        <record id="overall_dashboard" model="ir.actions.client">
+            <field name="name">DashBoard</field>
+            <field name="tag">overall_dashboard</field>
+        </record>
+
+        <menuitem id="overall_dashboard_menu" sequence="1"
+                  name="DashBoard"
+                  action="overall_dashboard"
+                  parent="petrol_station_dashboard.petrol_station_main_menu"/>
+        
+    </data>
+</odoo>
