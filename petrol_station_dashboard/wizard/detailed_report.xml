@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="detailed_report_form">
+            <field name="name">detailed.report.wizard</field>
+            <field name="model">detailed.report</field>
+            <field name="arch" type="xml">
+                <form string="Detailed Reports">
+                    <group>
+                        <group>
+                            <field name="report_date" invisible="1"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group>
+                            <field name="partner_ids" widget="many2many_tags" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="report_printed" invisible="1"/>
+                        <group invisible="report_printed == False">
+                            <field name="file_name" invisible="1"/>
+                            <field name="summary_file" readonly="1" filename="file_name"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="get_pdf_report" string="PDF"
+                                type="object" default_focus="1" class="btn btn-danger" icon="fa-file-pdf-o"/>
+                        <button name="get_excel_report" string="Excel"
+                                type="object" default_focus="1" class="btn btn-success" icon="fa-file-pdf-o"/>
+                        <button string="Cancel" class="btn-default" special="cancel" icon="fa-times"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_detailed_reports" model="ir.actions.act_window">
+            <field name="name">Detailed Report</field>
+            <field name="res_model">detailed.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="detailed_report_menu"
+                  name="Detailed Report"
+                  action="action_detailed_reports"
+                  parent="fuel_report_menu"/>
+    </data>
+</odoo>

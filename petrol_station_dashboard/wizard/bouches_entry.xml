@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bouche_entry_tree_view" model="ir.ui.view">
+        <field name="name">bouche.entry.tree.view</field>
+        <field name="model">bouches.entry.details</field>
+        <field name="arch" type="xml">
+            <tree create="0">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="bouche_entry_form_view" model="ir.ui.view">
+        <field name="name">bouche.entry.form.view</field>
+        <field name="model">bouches.entry.details</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button string='Confirm' name="action_confirm" type="object"
+                            class="btn-primary" invisible="state not in 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="today_price" readonly="state not in 'draft'"/>
+                            <field name="bouche_id" readonly="state not in 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="date" readonly="state not in 'draft'"/>
+                            <field name="user" readonly="state not in 'draft'"/>
+                            <field name="bou_total_qty" readonly="state not in 'draft'"/>
+                        </group>
+                    </group>
+                    <field name="bouch_ids" readonly="state not in 'draft'">
+                        <tree editable="bottom">
+                            <field name="customer_id" required="1"/>
+                            <field name="vehicle_no" required="1"/>
+                            <field name="bouche_id"/>
+                            <field name="onhand_qty"/>
+                            <field name="bouche_capacity"/>
+                            <field name="bouche_sale_qty" sum="Total"/>
+                            <field name="payment_mode" required="1"/>
+                            <field name="payment_type"/>
+                            <field name="bouche_amount" sum="Total"/>
+                        </tree>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="bouche_entry_action" model="ir.actions.act_window">
+        <field name="name">Bouche Entry</field>
+        <field name="res_model">bouches.entry.details</field>
+        <field name="view_mode">form</field>
+        <field name="binding_view_types">list</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_bouch_entry_wizard" model="ir.actions.act_window">
+        <field name="name">Bouch Entry</field>
+        <field name="res_model">bouches.entry.details</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="bouche_entry_sub_menu"
+              name="Bouche Entry"
+              action="action_bouch_entry_wizard"
+              groups="petrol_station_dashboard.group_bouches_entry"
+              sequence="10"
+              parent="petrol_station_dashboard.petrol_pump_config_submenu"/>
+</odoo>

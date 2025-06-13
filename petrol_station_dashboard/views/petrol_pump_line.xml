@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="petrol_station_pump_line_form" model="ir.ui.view">
+            <field name="name">petrol.station.pump.line.form</field>
+            <field name="model">petrol.station.pump.line</field>
+            <field name="arch" type="xml">
+                <form string="Petrol Pump Line">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="pump_name"/>
+                                <field name="start_reading"/>
+                                <field name="end_reading"/>
+                                <field name="record_date"/>
+                                <field name="amount"/>
+                                <field name="employee_id"/>
+                                <field name="start_reading"/>
+                                <field name="end_reading"/>
+                                <field name="product_id"/>
+                                <field name="quotation_create" invisible="1"/>
+                                <field name="advance_create" invisible="0"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="petrol_station_pump_line_tree" model="ir.ui.view">
+            <field name="name">petrol.station.pump.line.tree</field>
+            <field name="model">petrol.station.pump.line</field>
+            <field name="arch" type="xml">
+                <tree string="Petrol Pump Line">
+                    <field name="petrol_pump"/>
+                    <field name="parent_id"/>
+                    <field name="pump_name" invisible="1"/>
+                    <field name="create_date"/>
+                    <field name="start_reading"/>
+                    <field name="end_reading"/>
+                    <field name="amount" invisible="1"/>
+                    <field name="employee_id"/>
+                    <field name="fp_id" optional="hide" invisible="1"/>
+                    <field name="pump_sno" optional="hide" invisible="1"/>
+                    <field name="date_time" optional="hide" invisible="1"/>
+                    <field name="nozzle_no" optional="hide" invisible="1"/>
+                    <field name="shift_sale" optional="hide" invisible="1"/>
+                    <field name="shift_vol" optional="hide" invisible="1"/>
+                    <field name="cum_volume" optional="hide" invisible="1"/>
+                    <field name="cum_sale"/>
+                    <field name="advance_amount" sum="Total"/>
+                    <field name="product_id"/>
+                    <field name="quotation_create" optional="hide" invisible="1"/>
+                    <field name="advance_create" optional="hide" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="petrol_station_pump_line_action" model="ir.actions.act_window">
+            <field name="name">Petrol Station Pump Line</field>
+            <field name="res_model">petrol.station.pump.line</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+    </data>
+</odoo>

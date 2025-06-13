@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="payment_mode_report_wizard_view">
+            <field name="name">payment.mode.report.wizard</field>
+            <field name="model">payment.mode.report</field>
+            <field name="arch" type="xml">
+                <form string="Payment Mode Reports">
+                    <group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group>
+                            <field name="journal_id" widget="many2many_tags"
+                                   options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="get_pdf_report" string="PDF"
+                                type="object" default_focus="1" class="btn btn-danger" icon="fa-file-pdf-o"/>
+                        <button string="Cancel" class="btn-default" special="cancel" icon="fa-times"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_payment_mode_report_wizard" model="ir.actions.act_window">
+            <field name="name">Payment Mode Report</field>
+            <field name="res_model">payment.mode.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_payment_mode_report"
+                  name="Payment Mode Report"
+                  action="petrol_station_dashboard.action_payment_mode_report_wizard"
+                  parent="fuel_report_menu"/>
+
+    </data>
+</odoo>

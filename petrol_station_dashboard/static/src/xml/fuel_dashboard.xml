@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="FuelNozzleDashboard">
+        <section class="mh-100">
+            <div class="container header-container">
+                <div class="petrol-container-banner fixed-top-title mt-5">
+                    <div class="tea-title text-center">
+                       <h5 class="text-uppercase">
+                           <t t-if="state.title">
+                               <span t-esc="state.title"/>
+                           </t>
+                           <t t-else="">
+                               <span>Fuel Station dashboard</span>
+                           </t>
+                       </h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container border my-5 board-container">
+                <div class="tea-container row">
+                    <t t-foreach="state.data" t-as="category" t-key="category['id']">
+                        <div class="col-md-6 p-4">
+                            <div class="row">
+                                <div class="col-6">
+                                    <t t-if="category.pump_sale_type == 'truck'">
+                                        <img src="/petrol_station_dashboard/static/src/img/rental_truck_1.png" alt="Rental Truck"
+                                             class="img img-fluid"/>
+                                        <div class="border text-center m-2 px-2 rounded align-middle pump_name"
+                                             style="background-color: darkolivegreen;">
+                                                <span class="text-center align-middle mt-2 text-white"
+                                                      t-esc="category.name"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="category.pump_sale_type == 'tank'">
+                                        <img src="/petrol_station_dashboard/static/src/img/bouches_tank.png" alt="Bouches Truck"
+                                             class="img img-fluid"/>
+                                        <div class="border text-center m-2 px-2 rounded align-middle pump_name"
+                                             style="background-color: darkolivegreen;">
+                                            <span class="text-center align-middle mt-2 text-white"
+                                                  t-esc="category.name"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="category.pump_sale_type == 'nozzle'">
+                                        <t t-if="category.pump_color == 'green'">
+                                            <img src="/petrol_station_dashboard/static/src/img/pump_green_2.png" alt="PUMP"
+                                                 class="img img-fluid"/>
+                                            <div class="border text-center m-2 px-2 rounded align-middle pump_name"
+                                                 style="background-color: darkolivegreen;">
+                                                <span class="text-center align-middle mt-2 text-white"
+                                                      t-esc="category.name"/>
+                                                -
+                                                <span class="text-center align-middle mt-2 text-white s_no_val"
+                                                      t-esc="category.s_no"/>
+                                            </div>
+                                        </t>
+                                        <t t-if="category.pump_color == 'blue'">
+                                            <img src="/petrol_station_dashboard/static/src/img/pump_blue_3.png" alt="PUMP"
+                                                 class="img img-fluid"/>
+                                            <div class="border text-center m-2 px-2 rounded align-middle pump_name"
+                                                 style="background-color: dodgerblue;">
+                                                <span class="text-center align-middle mt-2 text-white"
+                                                      t-esc="category.name"/>
+                                                -
+                                                <span class="text-center align-middle mt-2 text-white s_no_val"
+                                                      t-esc="category.s_no"/>
+                                            </div>
+                                        </t>
+                                    </t>
+                                </div>
+                                <div class="tea_card col-6">
+                                    <form>
+                                        <h4 class="text-center">
+                                            <span class="pump-parent" t-esc="category.parent_id"/>
+                                        </h4>
+                                        <t t-if="category.pump_sale_type == 'nozzle'">
+                                            <div class="form-group row mt-2">
+                                                <label for="employee_id" class="col-4 col-form-label">Employee</label>
+                                                <div class="col-8">
+                                                    <input type="text" class="form-control employee_input" readonly="1"
+                                                           id="employee_id" t-att-value="category.employee_name"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mt-2">
+                                                <label for="start_reading"
+                                                       class="col-4 col-form-label">Start Reading</label>
+                                                <div class="col-8">
+                                                    <input type="text" class="form-control employee_input" readonly="1"
+                                                           id="start_reading_1" t-att-value="category.end_reading"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mt-2">
+                                                <label for="start_time" class="col-4 col-form-label">Start Time</label>
+                                                <div class="col-8">
+                                                    <input type="datetime-local" class="form-control employee_input"
+                                                           id="start_time" readonly="1"
+                                                           t-att-value="category.old_update_time"/>
+                                                </div>
+                                            </div>
+
+                                            <t t-if="category.check != true">
+                                                <div class="form-group row mt-2">
+                                                    <label for="end_reading"
+                                                           class="col-4 col-form-label">End Reading</label>
+                                                    <div class="col-8">
+                                                        <input type="text" class="form-control employee_input"
+                                                               id="end_reading_1" value="0.00"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mt-2">
+                                                    <label for="end_time" class="col-4 col-form-label">End Time</label>
+                                                    <div class="col-8">
+                                                        <input type="datetime-local" class="form-control employee_input"
+                                                               id="end_time" t-att-p-id="category.id"/>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </t>
+
+                                        <t t-if="category.pump_sale_type == 'truck'">
+                                            <div class="form-group row mt-2">
+                                                <label for="vehicle_id"
+                                                       class="col-4 col-form-label">Vehicle Name</label>
+                                                <div class="col-8">
+                                                    <input type="text" class="form-control employee_input" readonly="1"
+                                                           id="vehicle_id" t-att-value="category.fleet_id"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mt-2">
+                                                <label for="fuel_type" class="col-4 col-form-label">Fuel Type</label>
+                                                <div class="col-8">
+                                                <input type="text" class="form-control employee_input" readonly="1"
+                                                       id="fuel_type" t-att-value="category.fuel_id"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mt-2">
+                                                <label for="last_odometer"
+                                                       class="col-4 col-form-label">Last Odometer</label>
+                                                <div class="col-8">
+                                                    <input type="text" class="form-control employee_input" readonly="1"
+                                                           id="last_odometer" t-att-value="category.last_odometer"/>
+                                                </div>
+                                            </div>
+                                        </t>
+                                        <t t-if="category.pump_sale_type == 'tank'">
+                                            <div class="form-group row mt-2">
+                                                <label for="vehicle_id"
+                                                       class="col-4 col-form-label">Vehicle Name</label>
+                                                <div class="col-8">
+                                                    <input type="text" class="form-control employee_input" readonly="1"
+                                                           id="vehicle_id" t-att-value="category.fleet_id"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mt-2">
+                                                <label for="capacity" class="col-4 col-form-label">Capacity</label>
+                                                <div class="col-8">
+                                                <input type="text" class="form-control employee_input" readonly="1"
+                                                       id="capacity" t-att-value="category.bouche_capacity"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mt-2">
+                                                <label for="onhand" class="col-4 col-form-label">On-Hand</label>
+                                                <div class="col-8">
+                                                    <input type="text" class="form-control employee_input" readonly="1"
+                                                           id="onhand" t-att-value="category.bouche_onhand"/>
+                                                </div>
+                                            </div>
+                                        </t>
+
+                                        <div class="row mt-4 text-center">
+                                            <div class="col-6">
+                                                <t t-if="category.check != true">
+                                                <button class="btn btn-danger open_wizard"
+                                                        t-att-id="category.id" t-att-emp_id="category.employee_id"
+                                                        t-att-s_no="category.s_no"
+                                                        t-att-st_read="category.start_reading"
+                                                        t-att-e_read="category.end_reading"
+                                                        t-att-new_read="category.last_reading"
+                                                        t-att-petty_status="category.petty_cash_received"
+                                                        t-att-petty_cash_new="category.petty_cash_last"
+                                                        t-att-start_km="category.last_odometer"
+                                                        t-att-fleet="category.fleet_id"
+                                                        t-att-fuel_id="category.fuel_id"
+                                                        t-att-type="category.pump_sale_type"
+                                                        t-att-machine="category.machine_id"
+                                                        t-on-click="open_wizard">Open Statement</button>
+                                                </t>
+                                            </div>
+                                            <div class="col-6">
+                                                <t t-if="category.check == true">
+                                                    <button class="btn btn-danger open_record"
+                                                            t-on-click="pump_data_function"
+                                                            t-att-type="category.pump_sale_type"
+                                                            t-att-id="category.id" t-att-machine="category.machine_id">Closing Statement</button>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="id01" class="modal remark_main_box">
+                            <form class="modal-content animate">
+                                <div class="container remark_box">
+                                    <h2>HEADER Nozzle</h2>
+                                    <form>
+                                        <div class="row justify-content-around">
+                                            <div class="col-md-10">
+                                                <div class="form-group row mt-3">
+                                                    <label for="pump_sno"
+                                                           class="col-3 col-form-label">PUMP S.NO</label>
+                                                    <div class="col-9">
+                                                        <input type="text" id="pump_sno" class="form-control"
+                                                               required="1" readonly="1"
+                                                               name="pump_sno" min="0"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mt-3">
+                                                    <label for="start_reading" class="col-3 col-form-label">START READING</label>
+                                                    <div class="col-9">
+                                                        <input type="number" id="start_reading"
+                                                               class="form-control"
+                                                               t-att-value="category.end_reading"
+                                                               readonly="1" name="start_reading" min="0"
+                                                               step="0.001"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mt-3">
+                                                    <label for="end_reading"
+                                                           class="col-3 col-form-label">END READING</label>
+                                                    <div class="col-9">
+                                                        <input type="number" id="end_reading"
+                                                               class="form-control"
+                                                               readonly="1"
+                                                               required="1" value="0.000" name="end_reading"
+                                                               min="0"
+                                                               step="0.001"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mt-3">
+                                                    <label for="cum_sale"
+                                                           class="col-3 col-form-label">CUM SALE(L)</label>
+                                                    <div class="col-9">
+                                                        <input type="number" id="cum_sale" class="form-control"
+                                                               required="1" readonly="1"
+                                                               name="cum_sale" min="0"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mt-3">
+                                                    <label for="advance_amount" class="col-3 col-form-label">ADVANCE AMOUNT</label>
+                                                    <div class="col-9">
+                                                        <input type="number" id="advance_amount"
+                                                               class="form-control" required="1"
+                                                               name="advance_amount" min="0"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row mt-3">
+                                                    <label for="product"
+                                                           class="col-3 col-form-label">FUEL</label>
+                                                    <div class="col-9">
+                                                        <input type="text" id="fuel_name" class="form-control"
+                                                               t-att-value="category.fuel_id"
+                                                               readonly="1" name="fuel_name"/>
+                                                    </div>
+                                                </div>
+                                                <t t-if="category.support_person == true">
+                                                    <div class="form-group row mt-3">
+                                                        <label for="sub_employee" class="col-3 col-form-label">Support Employee</label>
+                                                        <div class="col-9">
+                                                            <select name="sub_employee" id="sub_employee"
+                                                                    t-attf-class="sub_employee form-control">
+                                                                <t t-foreach='state.emp_data' t-as="se" t-key="se.id">
+                                                                    <option class="sub-id" t-att-value="se.id"
+                                                                            t-att-data-sub-id="se.id">
+                                                                        <span t-esc="se.name"/>
+                                                                    </option>
+                                                                </t>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                                <t t-if="category.petty_cash == true">
+                                                    <div class="form-group row mt-3 petty_cash">
+                                                        <label for="product"
+                                                               class="col-3 col-form-label">PETTY CASH</label>
+                                                        <div class="col-9">
+                                                            <input type="number" id="petty_cash_amount"
+                                                                   class="form-control"
+                                                                   value="0.000" name="petty_cash_amount"/>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                        </div>
+                                        <div class="container_btn align-right mt-5 row justify-content-end">
+                                            <div class="col-6">
+                                                <button type="button"
+                                                        t-att-emp_id="category.employee_id"
+                                                        t-att-sub_emp_id="category.support_person"
+                                                        t-att-id="category.id" t-att-aa="category.pump_sale_type"
+                                                        entry_type="truck"
+                                                        class="pause_triger_function btn btn-primary"
+                                                        t-on-click="pause_trigger_function">Submit</button>
+                                                <button type="button" onclick="window.history.back();"
+                                                        class="btn btn-danger cancelbtn">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </form>
+                        </div>
+                        <t t-if="category.pump_sale_type == 'truck'">
+                            <div id="id02" class="modal truck_main_box">
+                            <form class="modal-content animate">
+                                <div class="container truck_box">
+                                    <form>
+                                        <div class="row justify-content-around">
+                                            <h4>Vehicle Details</h4>
+                                            <div class="form-group mt-2 col-md-5">
+                                                    <label for="vehicle_name"
+                                                           class="col-form-label">Vehicle</label>
+                                                <input type="text" id="vehicle_name" class="form-control"
+                                                       name="vehicle_name" readonly="1"
+                                                       t-att-value="category.fleet_id"/>
+                                                </div>
+                                            <div class="form-group mt-2 col-md-5">
+                                                    <label for="driver_name"
+                                                           class="col-form-label">Driver Name</label>
+                                                <input type="text" id="driver_name" class="form-control"
+                                                       required="1"
+                                                       name="driver_name"/>
+                                                </div>
+                                            <div class="form-group mt-5 col-md-5">
+                                                    <label for="start_km"
+                                                           class="col-form-label">Starting KM</label>
+                                                <input type="number" id="start_km" class="form-control"
+                                                       name="start_km" t-att-value="category.last_odometer"
+                                                       readonly="1" value="0.000"/>
+                                                </div>
+                                            <div class="form-group mt-5 col-md-5">
+                                                    <label for="end_km"
+                                                           class="col-form-label">Ending KM</label>
+                                                <input type="number" id="end_km" class="form-control"
+                                                       name="end_km" value="0.000"/>
+                                                </div>
+                                            <div class="form-group mt-5 col-md-5">
+                                                    <label for="total_km"
+                                                           class="col-form-label">Total KM</label>
+                                                <input type="number" id="total_km" class="form-control"
+                                                       readonly="1"
+                                                       name="total_km" value="0.000"/>
+                                                </div>
+                                            <div class="form-group mt-5 col-md-5">
+                                                    <label for="total_amount"
+                                                           class="col-form-label">Total Amount</label>
+                                                <input type="number" id="total_amount" class="form-control"
+                                                       required="1"
+                                                       name="total_amount" value="0.00"/>
+                                                </div>
+                                        </div>
+                                        <div class="row mt-5" style="border-top: 2px solid #000;">
+                                            <div class="expense col-3 mt-3">
+                                                <h4>Driver Expense</h4>
+                                                <div class="form-group">
+                                                        <label for="beta_expense"
+                                                               class="col-form-label">Beta Expense</label>
+                                                    <input type="number" id="beta_expense" class="form-control"
+                                                           name="beta_expense" value="0.00"/>
+                                                    </div>
+                                                <div class="form-group mt-5">
+                                                        <label for="food_expense"
+                                                               class="col-form-label">Food Expense</label>
+                                                    <input type="number" id="food_expense" class="form-control"
+                                                           name="food_expense" value="0.00"/>
+                                                    </div>
+                                            </div>
+
+                                            <div class="expense col-3 mt-3">
+                                                    <h4>Vehicle Expense</h4>
+                                                <div class="form-group">
+                                                            <label for="maintenance_service"
+                                                                   class="col-form-label">Maintenance &amp; Service</label>
+                                                    <input type="number" id="maintenance_service"
+                                                           class="form-control"
+                                                           name="maintenance_service" value="0.00"/>
+                                                        </div>
+                                                </div>
+                                            <div class="expense col-3 mt-3">
+                                                <h4>Admin Expense</h4>
+                                                <div class="form-group">
+                                                        <label for="loading_expense"
+                                                               class="col-form-label">Loading &amp; Unloading</label>
+                                                    <input type="number" id="loading_expense" class="form-control"
+                                                           name="loading_expense" value="0.00"/>
+                                                    </div>
+                                                <div class="form-group mt-5">
+                                                        <label for="rto_expense"
+                                                               class="col-form-label">Police/Rto</label>
+                                                    <input type="number" id="rto_expense" class="form-control"
+                                                           name="rto_expense" value="0.00"/>
+                                                    </div>
+                                                <div class="form-group mt-5">
+                                                        <label for="commission_expense"
+                                                               class="col-form-label">Commission</label>
+                                                    <input type="number" id="commission_expense"
+                                                           class="form-control"
+                                                           name="commission_expense" value="0.00"/>
+                                                    </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="container_btn align-right mt-5 row justify-content-end">
+                                            <div class="col-6">
+                                                <button type="button" line_id="2322" t-att-emp_id="category.employee_id"
+                                                    t-att-id="category.id" entry_type="truck"
+                                                    t-att-aa="category.pump_sale_type"
+                                                    class="pause_triger_function btn btn-primary"
+                                                        t-on-click="pause_trigger_function">Submit</button>
+                                                <button type="button" onclick="window.history.back();"
+                                                        class="btn btn-danger cancelbtn">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </form>
+                        </div>
+                        </t>
+
+
+                    </t>
+                </div>
+            </div>
+        </section>
+    </t>
+</templates>

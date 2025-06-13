@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale_order_wizard_tree_view" model="ir.ui.view">
+            <field name="name">sale.order.wizard.tree.view</field>
+            <field name="model">sale.order.wizard</field>
+            <field name="arch" type="xml">
+                <tree create="0">
+                    <field name="name"/>
+                    <field name="pump_id"/>
+                    <field name="date" widget="date" string="Entry Date"/>
+                    <field name="start_reading"/>
+                    <field name="end_reading"/>
+                    <field name="total_reading"/>
+                    <field name="test_sale_value"/>
+                    <field name="final_sale_count"/>
+                    <field name="today_price"/>
+                    <field name="final_sale_amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="sale_order_wizard_form_view" model="ir.ui.view">
+            <field name="name">sale.order.wizard.form.view</field>
+            <field name="model">sale.order.wizard</field>
+            <field name="arch" type="xml">
+                <form id="my_wizard">
+                    <header>
+                        <button string='Generate Sale Order' name="action_create_sale_order" type="object"
+                                class="btn-primary" invisible="state not in 'draft'"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="get_payment_details"
+                                    type="object"
+                                    icon="fa-money"
+                                    class="oe_stat_button"
+                                    invisible="payment_count == 0">
+                                <field name="payment_count"
+                                       string="Payment" widget="statinfo"/>
+                            </button>
+                            <button name="get_expense_details"
+                                    type="object"
+                                    icon="fa-money"
+                                    class="oe_stat_button"
+                                    invisible="expense_count == 0">
+                                <field name="expense_count"
+                                       string="Expense" widget="statinfo"/>
+                            </button>
+                            <button name="get_sale_details"
+                                    type="object"
+                                    icon="fa-money"
+                                    class="oe_stat_button"
+                                    invisible="sale_count == 0">
+                                <field name="sale_count"
+                                       string="Sales" widget="statinfo"/>
+                            </button>
+
+                            <button name="get_indent_details"
+                                    type="object"
+                                    icon="fa-money"
+                                    class="oe_stat_button"
+                                    invisible="indent_count == 0">
+                                <field name="indent_count"
+                                       string="Indent" widget="statinfo"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name" readonly="1" force_save="1"/>
+                            </h1>
+                        </div>
+
+                        <div name="entry_options" class="mb-3">
+                            <span class="d-inline-block">
+                                <field name="test_need" widget="boolean_toggle"
+                                       readonly="state not in 'draft'"/>
+                                <label for="test_need"/>
+                            </span>
+                            <span class="d-inline-block" groups="petrol_station_dashboard.group_bouches_entry">
+                                <field name="bouches_need" widget="boolean_toggle"
+                                       readonly="state not in 'draft'"/>
+                                <label for="bouches_need"/>
+                            </span>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="start_reading" readonly="1" force_save="1"/>
+                                <field name="end_reading" readonly="1" force_save="1"/>
+                                <field name="total_reading" readonly="1" force_save="1"/>
+                                <field name="sale_id" invisible="1"/>
+                                <field name="picking_id" invisible="1"/>
+                                <field name="return_id" invisible="1"/>
+                                <field name="date" string="Entry Date" readonly="state not in 'draft'"/>
+                                <field name="company_id" readonly="1"/>
+                                <field name="day_difference" force_save="1"/>
+                            </group>
+                            <group>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="pump_id" readonly="1" force_save="1"/>
+                                <field name="working_hours" widget="float_time"/>
+                                <field name="actual_working_hours" widget="float_time"/>
+                                <field name="product_id"/>
+                                <field name="today_price" readonly="state not in 'draft'"/>
+                                <field name="total_price" force_save="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Payment Details">
+                                <separator string="Payment"/>
+                                <field name="line_ids" context="{'default_record_type': 'advance'}"
+                                       readonly="state not in 'draft'">
+                                    <tree editable="bottom">
+                                        <field name="ad_record_type"/>
+                                        <field name="payment_mode" options="{'no_open': True, 'no_create': True}"/>
+                                        <field name="description"/>
+                                        <field name="date"/>
+                                        <field name="employee_id"/>
+                                        <field name="sub_employee_id"
+                                               groups="petrol_station_dashboard.group_supportive_person"/>
+                                        <field name="amount" sum="Total"/>
+                                    </tree>
+                                </field>
+
+                                <separator string="Expense Payment"/>
+                                <field name="expense_ids" readonly="state not in 'draft'">
+                                    <tree editable="bottom">
+                                        <field name="ex_record_type" optional="hide"/>
+                                        <field name="product_id" options="{'no_open': True, 'no_create': True}"
+                                               domain="[('can_be_expensed', '=', True)]"/>
+                                        <field name="payment_mode" options="{'no_open': True, 'no_create': True}"/>
+                                        <field name="description"/>
+                                        <field name="employee_id"/>
+                                        <field name="date"/>
+                                        <field name="amount" sum="Total"/>
+                                    </tree>
+                                </field>
+
+                                <separator string="Credit Sale"/>
+                                <field name="credit_sale_ids" readonly="state not in 'draft'">
+                                    <tree editable="bottom">
+                                        <field name="cr_record_type" optional="hide"/>
+                                        <field name="customer_id" options="{'no_open': True, 'no_create': True}"/>
+                                        <field name="description"/>
+                                        <field name="indent_no"/>
+                                        <field name="date"/>
+                                        <field name="vehicle_number" class="text-uppercase"/>
+                                        <field name="amount" sum="Total"/>
+                                    </tree>
+                                </field>
+
+                                <separator string="QC - TEST"
+                                           invisible="test_need != True"/>
+                                <field name="test_sale_ids"
+                                       readonly="state not in 'draft'" invisible="test_need != True">
+                                    <tree editable="bottom" create="0" delete="0">
+                                        <field name="test_record_type"/>
+                                        <field name="fuel_id" options="{'no_open': True, 'no_create': True}"/>
+                                        <field name="test_qty"/>
+                                        <field name="per_liter_amount"/>
+                                        <field name="total_amount" sum="Total"/>
+                                    </tree>
+                                </field>
+                                <separator string="Oil Sale"/>
+                                <field name="oil_sale_ids" readonly="state not in 'draft'">
+                                    <tree editable="bottom">
+                                        <field name="oil_id" options="{'no_open': True, 'no_create': True}"/>
+                                        <field name="oil_qty"/>
+                                        <field name="list_price"/>
+                                        <field name="oil_amount" sum="Total"/>
+                                    </tree>
+                                </field>
+
+                                <separator string="Bouches Sale" groups="petrol_station_dashboard.group_bouches_entry"
+                                           invisible="bouches_need != True"/>
+                                <field name="bouches_sale_ids" readonly="state not in 'draft'"
+                                       invisible="bouches_need != True"
+                                       groups="petrol_station_dashboard.group_bouches_entry">
+                                    <tree editable="bottom">
+                                        <field name="bouche_id" options="{'no_open': True, 'no_create': True}"/>
+                                        <field name="bouche_capacity"/>
+                                        <field name="onhand_qty"/>
+                                        <field name="vehicle_no" optional="hide"/>
+                                        <field name="driver_id" optional="hide"/>
+                                        <field name="bouche_sale_qty"/>
+                                        <field name="bouche_amount" sum="Total"/>
+                                    </tree>
+                                </field>
+                                <separator string="Petty Cash" groups="petrol_station_dashboard.group_petty_cash"/>
+                                <field name="journal_ids" readonly="1" force_save="1"
+                                       groups="petrol_station_dashboard.group_petty_cash">
+                                    <tree editable="bottom" delete="0" create="0">
+                                        <field name="coa_id" options="{'no_open': True, 'no_create': True}"/>
+                                        <field name="employee_id" options="{'no_open': True, 'no_create': True}"/>
+                                        <field name="description"/>
+                                        <field name="debit"/>
+                                        <field name="credit"/>
+                                    </tree>
+                                </field>
+                                <separator string="Credit Payment"/>
+                                <field name="credit_payment_ids">
+                                    <tree editable="bottom">
+                                        <field name="customer_id" options="{'no_open': True, 'no_create': True}"/>
+                                        <field name="payment_mode" options="{'no_open': True, 'no_create': True}"/>
+                                        <field name="amount" sum="Total" string="Received Amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                        <group col="12" class="oe_invoice_lines_tab">
+                            <group colspan="8">
+                                <field name="total_advance_amount"
+                                       invisible="total_advance_amount &lt;= 0.00"/>
+                                <field name="total_expense_amount"
+                                       invisible="total_expense_amount &lt;= 0.00"/>
+                                <field name="credit_sale_amount"
+                                       invisible="credit_sale_amount &lt;= 0.00"/>
+                                <field name="credit_payment_amount"
+                                       invisible="credit_payment_amount &lt;= 0.00"/>
+                                <field name="test_sale_amount" force_save="1"
+                                       invisible="test_need != True or test_sale_amount &lt;= 0.00"/>
+                                <field name="oil_sale_amount" force_save="1"
+                                       invisible="oil_sale_amount &lt;= 0.00"/>
+                                <field name="return_petty_cash" groups="petrol_station_dashboard.group_petty_cash"/>
+                                <field name="emp_petty_cash_onhand" invisible="1"
+                                       groups="petrol_station_dashboard.group_petty_cash"/>
+                                <field name="emp_petty_cash_balance" invisible="1"
+                                       groups="petrol_station_dashboard.group_petty_cash"/>
+                                <field name="final_sale_amount" force_save="1"/>
+                            </group>
+                            <group colspan="4">
+                                <group class="oe_subtotal_footer">
+                                    <field name="final_total_price" force_save="1"/>
+                                    <field name="balance_price" force_save="1"/>
+                                </group>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sale_order_wizard" model="ir.actions.act_window">
+            <field name="name">Generate Sale Order</field>
+            <field name="res_model">sale.order.wizard</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="create_sale_order_action" model="ir.actions.act_window">
+            <field name="name">Generate Sale Order</field>
+            <field name="res_model">sale.order.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="binding_view_types">list</field>
+            <field name="binding_model_id" ref="petrol_station_dashboard.model_petrol_station_pump_line"/>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="petrol_create_sale_submenu"
+                  name="Closing Entry"
+                  action="action_sale_order_wizard"
+                  sequence="2"
+                  parent="petrol_station_dashboard.petrol_pump_config_submenu"/>
+    </data>
+</odoo>

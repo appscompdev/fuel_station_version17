@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="hr_hr_employee_view_form" model="ir.ui.view">
+            <field name="name">hr.employee.view.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <group name="payroll_group" position="after">
+                    <group name="petty_cash" string="Petty Cash" groups="petrol_station_dashboard.group_petty_cash">
+                        <field name="coa_id"/>
+                    </group>
+                </group>
+                <field name="coach_id" position="after">
+                    <field name="outstanding"/>
+                    <field name="driver" invisible="1"/>
+                </field>
+                <notebook position="inside">
+                    <page string="Driver Details" invisible="driver != True">
+                        <group>
+                            <field name="license_no"/>
+                            <field name="license_reg_date"/>
+                            <field name="license_expiry_date"/>
+                        </group>
+                    </page>
+                    <page string="Pump Entry">
+                        <field name="pump_entry_ids">
+                            <tree editable="bottom">
+                                <field name="pump_name"/>
+                                <field name="start_reading"/>
+                                <field name="end_reading"/>
+                                <field name="record_date"/>
+                                <field name="amount"/>
+                                <field name="employee_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+
+                <field name="work_email" position="after">
+                    <field name="shift_id" options="{'no_open': True, 'no_create': True}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_quotation_tree_inherit" model="ir.ui.view">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree"/>
+            <field name="arch" type="xml">
+                <field name="create_date" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="create_date" position="after">
+                    <field name="date_order" string="Order Date" widget="date"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="sale_order_pump_id_view_form" model="ir.ui.view">
+            <field name="name">sale.order.pump.view.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="source_id" position="after">
+                    <field name="petrol_pump" options="{'no_open': True, 'no_create': True}"/>
+                    <field name="indent_reference" invisible="1"/>
+                    <field name="pay_ref" readonly="1" force_save="1" invisible="1"/>
+                    <field name="sale_type" readonly="1" force_save="1" invisible="1"/>
+                </field>
+                <field name="team_id" position="after">
+                    <field name="employee_id"/>
+                    <field name="beta_create" invisible="1"/>
+                    <field name="beta_amount" invisible="1"
+                           readonly="state not in 'draft' or beta_create == True"/>
+                    <label for="beta_hours" invisible="1"/>
+                    <div name="beta_hours" invisible="1">
+                        <field name="beta_hours" class="oe_inline"
+                               readonly="state not in 'draft' or beta_create == True"/>
+                        <button name="create_beta_line" type="object" string="Create Beta"
+                                class="oe_highlight oe_inline"
+                                readonly="state not in 'draft' or beta_create == True"/>
+                    </div>
+                </field>
+                <xpath expr="//field[@name='order_line']//tree//field[@name='product_template_id']"
+                       position="attributes">
+                    <attribute name="domain">[('detailed_type', '=', 'product')]</attribute>
+                    <attribute name="options">{'no_open': True, 'no_create': True}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_template_id_view_form" model="ir.ui.view">
+            <field name="name">product.template.view.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <field name="detailed_type" position="before">
+                    <field name="add_beta_line" widget="boolean_toggle" invisible="1"/>
+                    <field name="pump_color" widget="radio" options="{'horizontal': True}"/>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="product_product_id_view_form" model="ir.ui.view">
+            <field name="name">product.product.view.form.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <field name="detailed_type" position="before">
+                    <field name="pump_color" widget="radio" options="{'horizontal': True}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="hr_contract_beta_view_form" model="ir.ui.view">
+            <field name="name">hr.contract.beta.view.form.inherit</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                <group name="salary" position="after">
+                    <group>
+                        <field name="beta_amount"/>
+                        <field name="onhand_amount" groups="petrol_station_dashboard.group_petty_cash"/>
+                        <field name="available_onhand_amount" groups="petrol_station_dashboard.group_petty_cash"/>
+                        <field name="petty_cash_last" groups="petrol_station_dashboard.group_petty_cash"/>
+                        <field name="petty_cash_received" groups="petrol_station_dashboard.group_petty_cash"
+                               invisible="1"/>
+                        <!--                        <field name="last_petty_cash"/>-->
+                    </group>
+                </group>
+            </field>
+        </record>
+
+        <record id="hr_expense_beta_view_form" model="ir.ui.view">
+            <field name="name">hr.expense.beta.view.form.inherit</field>
+            <field name="model">hr.expense</field>
+            <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+            <field name="arch" type="xml">
+                <field name="date" position="after">
+                    <field name="sale_id" readonly="1" force_save="1"/>
+                    <field name="pay_ref" readonly="1" force_save="1"/>
+                    <field name="fleet_id" readonly="1" force_save="1"/>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="res_partner_view_form" model="ir.ui.view">
+            <field name="name">res.partner.view.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="vat" position="after">
+                    <field name="default_customer"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="purchase_order_view_form" model="ir.ui.view">
+            <field name="name">purchase.order.view.form.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']//tree//field[@name='product_qty']" position="after">
+                    <field name="density" optional="hide"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']//tree//field[@name='price_subtotal']" position="attributes">
+                    <attribute name="optional">hide</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="attributes">
+                    <attribute name="readonly">True</attribute>
+                    <attribute name="force_save">True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="after">
+                    <field name="today_sale_price"/>
+                    <field name="difference_amount" readonly="1" force_save="1"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']//tree//field[@name='product_qty']" position="after">
+                    <field name="sub_total"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="view_payment_form_inherit" model="ir.ui.view">
+            <field name="name">account.payment.form.inherit</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <field name="payment_method_line_id" position="after">
+                    <field name="pay_ref" readonly="1" force_save="1"/>
+                    <field name="entry_type" readonly="1" force_save="1"/>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="view_move_form_inherit_petrol_station" model="ir.ui.view">
+            <field name="name">account.move.form.inherit.petrol</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <field name="source_id" position="after">
+                    <field name="pay_ref" readonly="1" force_save="1"
+                           invisible="pay_ref == False"/>
+                    <field name="bouch_ref" readonly="1" force_save="1"
+                           invisible="bouch_ref == False"/>
+                    <field name="indent_no" readonly="1" force_save="1"/>
+                    <field name="pump_sale_type" readonly="1" force_save="1"
+                           groups="petrol_station_dashboard.group_bouches_entry"/>
+                    <field name="fleet_id" readonly="1" force_save="1"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="fleet_vehicle_view_form_inherit_rental" model="ir.ui.view">
+            <field name="name">fleet.vehicle.form.inherit.rental</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+            <field name="arch" type="xml">
+                <button name="open_assignation_logs" position="before">
+                    <button name="get_expense_details"
+                            type="object"
+                            icon="fa-money"
+                            class="oe_stat_button"
+                            invisible="expense_count == 0">
+                        <field name="expense_count"
+                               string="Expense" widget="statinfo"/>
+                    </button>
+                    <button name="get_indent_details"
+                            type="object"
+                            icon="fa-money"
+                            class="oe_stat_button"
+                            invisible="invoice_count == 0">
+                        <field name="invoice_count"
+                               string="Invoice" widget="statinfo"/>
+                    </button>
+                </button>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_company_form_title">
+            <field name="name">res.company.title</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <xpath position="after" expr="//field[@name='website']">
+                    <field name="title" string="Fuel Dashboard Title" placeholder=""/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="hr.open_view_employee_list_my" model="ir.actions.act_window">
+            <field name="name">Employees</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">kanban,tree,form,activity</field>
+            <field name="domain">[('driver','=', False)]</field>
+            <field name="context">{'chat_icon': True,'default_driver':False}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="hr.view_employee_filter"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add a new employee
+                </p>
+                <p>
+                    With just a quick glance on the Odoo employee screen, you
+                    can easily find all the information you need for each person;
+                    contact data, job position, availability, etc.
+                </p>
+            </field>
+        </record>
+
+
+        <record id="open_view_driver_list_my" model="ir.actions.act_window">
+            <field name="name">Driver</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">kanban,tree,form,activity</field>
+            <field name="domain">[('driver','=', True)]</field>
+            <field name="context">{'chat_icon': True,'default_driver':True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="hr.view_employee_filter"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add a new employee
+                </p>
+                <p>
+                    With just a quick glance on the Odoo employee screen, you
+                    can easily find all the information you need for each person;
+                    contact data, job position, availability, etc.
+                </p>
+            </field>
+        </record>
+
+
+        <record id="view_picking_form" model="ir.ui.view">
+            <field name="name">stock.picking.form</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="pay_ref"/>
+                </xpath>
+            </field>
+        </record>
+
+        <menuitem
+                id="hr.menu_hr_employee_user"
+                name="Employees"
+                action="hr.open_view_employee_list_my"
+                parent="hr.menu_hr_employee_payroll"
+                sequence="1"/>
+        <menuitem
+                id="menu_hr_driver_user"
+                name="Driver"
+                action="open_view_driver_list_my"
+                parent="hr.menu_hr_employee_payroll"
+                sequence="1"/>
+
+    </data>
+</odoo>

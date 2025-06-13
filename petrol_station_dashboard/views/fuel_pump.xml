@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="petrol_station_pump_tree" model="ir.ui.view">
+            <field name="name">petrol.station.pump.tree</field>
+            <field name="model">petrol.station.pump</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="parent_id"/>
+                    <field name="s_no"/>
+                    <field name="start_reading"/>
+                    <field name="end_reading"/>
+                    <field name="product_id"/>
+                    <field name="employee_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="petrol_station_pump_form" model="ir.ui.view">
+            <field name="name">petrol.station.pump.form</field>
+            <field name="model">petrol.station.pump</field>
+            <field name="arch" type="xml">
+                <form string="Petrol Pump">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="parent_id" options="{'no_open': True, 'no_create': True}"/>
+                                <field name="pump_color" widget="radio" options="{'horizontal': True}"
+                                       invisible="parent_id == False or pump_sale_type not in 'nozzle'"/>
+                                <field name="s_no"/>
+                                <field name="close_statement_check" invisible="1"/>
+                                <field name="last_reading" invisible="1"/>
+                                <field name="new_reading_update_time" invisible="1"/>
+                                <field name="old_reading_update_time" invisible="1"/>
+                                <field name="product_ids" widget="many2many_tags"
+                                       options="{'no_open': True, 'no_create': True}" invisible="1"/>
+                                <field name="pump_sale_type" readonly="0" force_save="1"
+                                       invisible="parent_id == False"/>
+                            </group>
+                            <group>
+                                <field name="model_id"
+                                       invisible="parent_id == False or pump_sale_type not in 'truck'"/>
+                                <field name="vehicle_no"
+                                       invisible="parent_id == False or pump_sale_type not in 'truck'"/>
+                                <field name="truck_rental"
+                                       invisible="parent_id == False or pump_sale_type not in 'truck'"/>
+                                <field name="fleet_id"
+                                       invisible="parent_id == False or pump_sale_type not in 'truck'"/>
+                                <field name="end_km" string="Ending Km"
+                                       groups="fuel_station.group_bouches_entry"
+                                       invisible="pump_sale_type not in 'truck'"
+                                       readonly="pump_sale_type in 'truck'"/>
+                                <field name="start_reading"
+                                       invisible="parent_id == False or pump_sale_type not in 'nozzle'"/>
+                                <field name="end_reading"
+                                       invisible="parent_id == False or pump_sale_type not in 'nozzle'"/>
+                                <field name="employee_id" options="{'no_open': True, 'no_create': True}"
+                                       invisible="parent_id == False or pump_sale_type not in 'nozzle'"/>
+                                <field name="shift_id" options="{'no_open': True, 'no_create': True}"/>
+                                <field name="product_id" options="{'no_open': True, 'no_create': True}"
+                                       invisible="parent_id == False"/>
+                                <field name="bouche_capacity" groups="fuel_station.group_bouches_entry"
+                                       invisible="pump_sale_type not in 'tank'"/>
+                                <field name="onhand_qty" invisible="pump_sale_type not in 'tank'"
+                                       groups="fuel_station.group_bouches_entry"/>
+                                <field name="vehicle_no" invisible="pump_sale_type not in 'tank'"
+                                       groups="fuel_station.group_bouches_entry"/>
+                                <field name="driver_id" invisible="pump_sale_type not in 'tank'"
+                                       groups="fuel_station.group_bouches_entry"/>
+                                <field name="company_id" options="{'no_open': True, 'no_create': True}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Others" invisible="pump_sale_type in 'tank'">
+                                <field name="pump_entry_ids">
+                                    <tree editable="bottom">
+                                        <field name="petrol_pump"/>
+                                        <field name="start_reading"/>
+                                        <field name="end_reading"/>
+                                        <field name="create_date"/>
+                                        <field name="advance_amount"/>
+                                        <field name="employee_id"/>
+                                        <field name="sub_employee_id"
+                                               groups="petrol_station_dashboard.group_supportive_person"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Others" invisible="pump_sale_type not in 'tank'">
+                                <field name="bouches_sale_ids">
+                                    <tree editable="bottom">
+                                        <field name="nozzle_id" options="{'no_open': True, 'no_create': True}"/>
+                                        <field name="bouche_id" options="{'no_open': True, 'no_create': True}"/>
+                                        <field name="bouche_capacity"/>
+                                        <field name="onhand_qty"/>
+                                        <field name="vehicle_no" optional="hide"/>
+                                        <field name="driver_id" optional="hide"/>
+                                        <field name="bouche_sale_qty"/>
+                                        <field name="bouche_amount" sum="Total"/>
+                                    </tree>
+                                </field>
+
+                                <field name="bouch_ids">
+                                    <tree editable="bottom">
+                                        <field name="customer_id"/>
+                                        <field name="vehicle_no"/>
+                                        <field name="bouche_id"/>
+                                        <field name="onhand_qty"/>
+                                        <field name="bouche_capacity"/>
+                                        <field name="bouche_sale_qty" sum="Total"/>
+                                        <field name="payment_mode"/>
+                                        <field name="payment_type"/>
+                                        <field name="bouche_amount"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="petrol_station_pump_action" model="ir.actions.act_window">
+            <field name="name">Petrol Pump</field>
+            <field name="res_model">petrol.station.pump</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('parent_id', '=', False)]</field>
+        </record>
+
+        <record id="petrol_station_nozzle_action" model="ir.actions.act_window">
+            <field name="name">Petrol Nozzle</field>
+            <field name="res_model">petrol.station.pump</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[
+                ('parent_id', '!=', False),
+                ('pump_sale_type', '=', 'nozzle')
+                ]</field>
+        </record>
+
+        <record id="petrol_station_bouches_action" model="ir.actions.act_window">
+            <field name="name">Bouches</field>
+            <field name="res_model">petrol.station.pump</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[
+                ('parent_id', '!=', False),
+                ('pump_sale_type', '=', 'tank')
+                ]</field>
+            <field name="context">{
+                'default_pump_sale_type': 'tank',
+                }</field>
+        </record>
+
+        <record id="petrol_station_truck_action" model="ir.actions.act_window">
+            <field name="name">Rental Truck</field>
+            <field name="res_model">petrol.station.pump</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('parent_id', '!=', False), ('pump_sale_type', '=', 'truck')]</field>
+            <field name="context">{
+                'default_pump_sale_type': 'truck',
+                }</field>
+        </record>
+
+        <!--        <record id="petrol_station_pump_action" model="ir.actions.act_window">-->
+        <!--            <field name="name">Petrol Pump</field>-->
+        <!--            <field name="res_model">petrol.station.pump</field>-->
+        <!--            <field name="view_mode">tree,form</field>-->
+        <!--        </record>-->
+
+        <menuitem id="petrol_station_main_menu"
+                  name="Fuel Station"
+                  sequence="99"/>
+
+        <menuitem id="petrol_pump_config_submenu"
+                  name="Configuration"
+                  sequence="99"
+                  parent="petrol_station_main_menu"/>
+
+        <menuitem id="petrol_pump_dashboard_submenu"
+                  name="Fuel Pump"
+                  sequence="3"
+                  parent="petrol_station_main_menu"/>
+
+        <menuitem id="petrol_station_pump_menu"
+                  name="Fuel Pump"
+                  sequence="1"
+                  action="petrol_station_dashboard.petrol_station_pump_action"
+                  parent="petrol_pump_dashboard_submenu"/>
+
+        <menuitem id="petrol_station_nozzle_menu"
+                  name="Fuel Nozzle"
+                  sequence="2"
+                  action="petrol_station_dashboard.petrol_station_nozzle_action"
+                  parent="petrol_pump_dashboard_submenu"/>
+
+        <menuitem id="petrol_station_bouches_menu"
+                  name="Bouches"
+                  sequence="3"
+                  groups="petrol_station_dashboard.group_bouches_entry"
+                  action="petrol_station_dashboard.petrol_station_bouches_action"
+                  parent="petrol_station_dashboard.petrol_pump_dashboard_submenu"/>
+
+        <menuitem id="petrol_station_truck_menu"
+                  name="Rental Truck"
+                  sequence="4"
+                  groups="petrol_station_dashboard.group_rental_truck_entry"
+                  action="petrol_station_dashboard.petrol_station_truck_action"
+                  parent="petrol_station_dashboard.petrol_pump_dashboard_submenu"/>
+
+
+        <record id="petrol_pump_action_dashboard" model="ir.actions.client">
+            <field name="name">Fuel Pump</field>
+            <field name="tag">pump_dashboard</field>
+        </record>
+
+        <menuitem id="petrol_station_pump_dashboard" sequence="2"
+                  name="Fuel Station Dashboard"
+                  groups="petrol_station_dashboard.group_fuel_station_user"
+                  action="petrol_station_dashboard.petrol_pump_action_dashboard"
+                  parent="petrol_station_dashboard.petrol_station_main_menu"/>
+    </data>
+</odoo>

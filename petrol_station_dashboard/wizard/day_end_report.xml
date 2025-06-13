@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="fuel_day_end_report_wizard_view">
+            <field name="name">fuel.day.end.report.wizard</field>
+            <field name="model">fuel.day.end.report</field>
+            <field name="arch" type="xml">
+                <form string="Fuel Day Close Reports">
+                    <group>
+                        <group>
+                            <field name="report_date"/>
+                            <field name="start_date" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="end_date" invisible="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="get_pdf_report" string="PDF"
+                                type="object" default_focus="1" class="btn btn-danger" icon="fa-file-pdf-o"/>
+                        <button string="Cancel" class="btn-default" special="cancel" icon="fa-times"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_fuel_day_end_report_wizard" model="ir.actions.act_window">
+            <field name="name">Fuel Day End Report</field>
+            <field name="res_model">fuel.day.end.report</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_fuel_day_end_report"
+                  name="Fuel Day End Report"
+                  action="petrol_station_dashboard.action_fuel_day_end_report_wizard"
+                  parent="fuel_report_menu"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="petrol_pump_one" model="petrol.station.pump">
+        <field name="name">PUMP ONE</field>
+    </record>
+    <record id="petrol_pump_two" model="petrol.station.pump">
+        <field name="name">PUMP TWO</field>
+    </record>
+    <record id="petrol_pump_three" model="petrol.station.pump">
+        <field name="name">PUMP THREE</field>
+    </record>
+    <record id="petrol_pump_four" model="petrol.station.pump">
+        <field name="name">PUMP FOUR</field>
+    </record>
+    <record id="petrol_nozzle_one" model="petrol.station.pump">
+        <field name="name">Nozzle One</field>
+        <field name="s_no">N-001</field>
+        <field name="parent_id" ref="petrol_station_dashboard.petrol_pump_one"/>
+    </record>
+
+    <record id="seq_closing_entries" model="ir.sequence">
+        <field name="name">Closing Entries</field>
+        <field name="code">sale.order.wizard</field>
+        <field name="prefix">FS-Close-</field>
+        <field name="padding">5</field>
+    </record>
+
+    <record id="petrol_pump_bouches" model="petrol.station.pump">
+        <field name="name">Bouches</field>
+        <field name="pump_sale_type">tank</field>
+    </record>
+
+    <record id="petrol_pump_truck" model="petrol.station.pump">
+        <field name="name">Rental Truck</field>
+        <field name="pump_sale_type">truck</field>
+    </record>
+
+    <record id="bouch_entry_sequence" model="ir.sequence">
+        <field name="name">Bouches Entry Sequence</field>
+        <field name="code">bouches.entry.details</field>
+        <field name="prefix">BE/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="default_customer_id" model="res.partner">
+        <field name="name">Default Customer</field>
+        <field name="default_customer">true</field>
+    </record>
+</odoo>

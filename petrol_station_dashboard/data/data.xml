@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="fuel_type_petrol_template" model="product.template">
+            <field name="name">Petrol</field>
+            <field name="detailed_type">product</field>
+            <field name="description">Petrol</field>
+            <field name="list_price">0.0</field>
+            <field name="responsible_id" ref="base.user_admin"/>
+            <field name="uom_id" ref="uom.product_uom_litre"/>
+            <field name="uom_po_id" ref="uom.product_uom_litre"/>
+            <field name="sale_ok" eval="True"/>
+            <field name="purchase_ok" eval="True"/>
+        </record>
+
+        <record id="fuel_type_Diesel_template" model="product.template">
+            <field name="name">Diesel</field>
+            <field name="detailed_type">product</field>
+            <field name="description">Diesel</field>
+            <field name="list_price">0.0</field>
+            <field name="responsible_id" ref="base.user_admin"/>
+            <field name="uom_id" ref="uom.product_uom_litre"/>
+            <field name="uom_po_id" ref="uom.product_uom_litre"/>
+            <field name="sale_ok" eval="True"/>
+            <field name="purchase_ok" eval="True"/>
+        </record>
+
+        <record id="fuel_type_oil_categ_id" model="product.category">
+            <field name="name">Oil</field>
+            <field name="property_cost_method">standard</field>
+        </record>
+
+        <record id="fuel_type_oil_template" model="product.template">
+            <field name="name">Oil</field>
+            <field name="detailed_type">product</field>
+            <field name="description">Oil</field>
+            <field name="categ_id" ref="petrol_station_dashboard.fuel_type_oil_categ_id"/>
+            <field name="list_price">0.0</field>
+            <field name="responsible_id" ref="base.user_admin"/>
+            <field name="uom_id" ref="uom.product_uom_litre"/>
+            <field name="uom_po_id" ref="uom.product_uom_litre"/>
+            <field name="sale_ok" eval="True"/>
+            <field name="purchase_ok" eval="True"/>
+        </record>
+
+<!--        <record id="petty_cash_account" model="account.account">-->
+<!--            <field name="name">Petty Cash</field>-->
+<!--        </record>-->
+    </data>
+</odoo>

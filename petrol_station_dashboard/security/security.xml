@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.module.category" id="module_fuel_station">
+            <field name="name">Fuel Station</field>
+            <field name="description">Category for Fuel Station</field>
+            <field name="sequence">12</field>
+        </record>
+
+        <record id="group_fuel_station_user" model="res.groups">
+            <field name="name">User: Own Documents Only</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="category_id" ref="module_fuel_station"/>
+        </record>
+
+        <record id="group_fuel_station_user_all" model="res.groups">
+            <field name="name">User: All Documents</field>
+            <field name="implied_ids" eval="[(4, ref('group_fuel_station_user'))]"/>
+            <field name="category_id" ref="module_fuel_station"/>
+        </record>
+
+        <record id="group_fuel_station_manager" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="category_id" ref="module_fuel_station"/>
+            <field name="implied_ids" eval="[(4, ref('group_fuel_station_user_all'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+
+        <record model="ir.rule" id="fuel_station_record_rule">
+            <field name="name">See only his Documents</field>
+            <field name="model_id" ref="model_petrol_station_pump"/>
+            <field name="domain_force">['|',('create_uid','=',user.id),('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_fuel_station_user'))]"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+
+        <record model="ir.rule" id="fuel_station_user_all_record_rule">
+            <field name="name">All Documents</field>
+            <field name="model_id" ref="model_petrol_station_pump"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_fuel_station_user_all'))]"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+
+        <record model="ir.rule" id="fuel_station_admin_record_rule">
+            <field name="name">Administrator</field>
+            <field name="model_id" ref="model_petrol_station_pump"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_fuel_station_manager'))]"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+
+        <record model="ir.rule" id="sale_order_wizard_record_rule">
+            <field name="name">See only his Documents</field>
+            <field name="model_id" ref="model_sale_order_wizard"/>
+            <field name="domain_force">['|',('create_uid','=',user.id),('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_fuel_station_user'))]"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+
+        <record model="ir.rule" id="sale_order_wizard_user_all_record_rule">
+            <field name="name">All Documents</field>
+            <field name="model_id" ref="model_sale_order_wizard"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_fuel_station_user_all'))]"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+
+        <record model="ir.rule" id="sale_order_wizard_admin_record_rule">
+            <field name="name">Administrator</field>
+            <field name="model_id" ref="model_sale_order_wizard"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_fuel_station_manager'))]"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+
+        <record model="ir.rule" id="sale_order_wizard_line_record_rule">
+            <field name="name">See only his Documents</field>
+            <field name="model_id" ref="model_sale_order_wizard"/>
+            <field name="domain_force">['|',('create_uid','=',user.id),('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_fuel_station_user'))]"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+
+        <record model="ir.rule" id="sale_order_wizard_line_user_all_record_rule">
+            <field name="name">All Documents</field>
+            <field name="model_id" ref="model_sale_order_wizard"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_fuel_station_user_all'))]"/>
+            <field name="perm_unlink" eval="False"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+
+        <record model="ir.rule" id="sale_order_wizard_line_admin_record_rule">
+            <field name="name">Administrator</field>
+            <field name="model_id" ref="model_sale_order_wizard"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+            <field name="groups" eval="[(4, ref('group_fuel_station_manager'))]"/>
+            <field name="perm_unlink" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+    </data>
+</odoo>
