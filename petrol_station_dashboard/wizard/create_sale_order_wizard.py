@@ -384,7 +384,7 @@ class SaleOrderCreateWizard(models.Model):
 
         if return_pick.state == 'assigned':
             for mi in return_pick.move_ids_without_package:
-                mi.quantity_done = mi.product_uom_qty
+                mi.quantity = mi.product_uom_qty
             return_pick.button_validate()
 
     def _create_credit_payment(self):
@@ -539,7 +539,7 @@ class SaleOrderCreateWizard(models.Model):
                 x.date = self.date
                 if x.state == 'assigned':
                     for mi in x.move_ids_without_package:
-                        mi.quantity_done = mi.product_uom_qty
+                        mi.quantity = mi.product_uom_qty
                         mi.date = self.date.date()
                     x.button_validate()
                     self.picking_id = x.id
