@@ -9,7 +9,6 @@
                'handles expenses, sales, stocks inventory, and accounting tasks, providing comprehensive ledger reports'
                ' for effective tracking.',
     'images': ['static/description/banner.png'],
-    #'images': ['static/description/banner.gif'],
     'sequence': 1,
     'description': """ The fuel station management system efficiently handles pump and nozzle management, staff shifts,
      and daily fuel collections, along with credit-based sales tracking including vehicle numbers. It generates diverse
